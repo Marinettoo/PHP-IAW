@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva de PHP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Harmony (Gray-100, White, Blue-600 accent) -->
+    <!-- Application Structure Plan: Una SPA con una barra lateral de navegación (temas basados en el PDF) y un área de contenido principal. JS oculta/muestra paneles de contenido ('content-panel') según los atributos 'data-target' de los enlaces de navegación. Esta estructura se elige por su alta usabilidad y familiaridad para el aprendizaje/documentación, permitiendo a los usuarios explorar temas de forma no lineal, lo cual es superior a un informe estático. -->
+    <!-- Visualization & Content Choices: Report Info (Conceptos de PHP) -> Goal (Definir, Estructura, Caso de Uso) -> Presentation (Texto HTML, listas de definiciones, tablas, bloques <pre><code>) -> Interaction (Clics en la navegación lateral) -> Justification (El contenido es textual; la navegación interactiva es la clave para la exploración, no los gráficos) -> Library/Method (Vanilla JS para manipulación del DOM). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        .active-link {
+            background-color: #3b82f6; 
+            color: white;
+        }
+        .content-panel {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        pre {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        dt {
+            font-weight: 600;
+            color: #1e40af; 
+            margin-top: 1rem;
+        }
+        dd {
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans leading-relaxed text-gray-800">
+
+    <div class="flex h-screen">
+        
+        <aside id="sidebar" class="w-64 bg-white shadow-lg p-4 overflow-y-auto hidden md:block transition-all duration-300">
+            <h1 class="text-2xl font-bold text-blue-700 mb-6 border-b pb-3">Guía de PHP</h1>
+            <nav>
+                <ul class="space-y-2">
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700 active-link" data-target="inicio">Inicio</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="sintaxis">Sintaxis Básica</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="variables">Variables y Tipos</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="constantes">Constantes</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="operadores">Operadores</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="condicionales">Condicionales</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="bucles">Bucles</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="arrays">Arrays</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="funciones">Funciones</a></li>
+                    <li><a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-50 text-gray-700" data-target="strings">Cadenas (Strings)</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        
+        <main class="flex-1 flex flex-col h-screen">
+            
+            <header class="bg-white shadow-md p-4 flex justify-between items-center">
+                <button id="menu-toggle" class="md:hidden text-gray-700 hover:text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-800">Contenido Principal</h2>
+                <div></div>
+            </header>
+
+            
+            <div class="flex-1 overflow-y-auto p-6 md:p-10">
+
+                
+                <div id="inicio" class="content-panel">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Introducción a PHP</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es PHP?</h3>
+                        <p class="mb-2">PHP son las siglas de "PHP: Hypertext Preprocessor". Es un lenguaje de <span class="font-semibold">scripting</span> de código abierto y gratuito, muy popular, que se ejecuta en el <span class="font-semibold">backend</span> (lado del servidor).</p>
+                        <p class="mb-2">Fue creado en 1994 por Rasmus Lerdorf.</p>
+                        <h4 class="font-semibold mt-3 mb-2">Características Principales:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><strong>Lenguaje de Scripting:</strong> Se ejecuta paso a paso, interpretando las instrucciones una por una.</li>
+                            <li><strong>Backend:</strong> Se ejecuta en el servidor web (como Apache o Nginx), no en el navegador del usuario (como JavaScript). Su trabajo es procesar datos, conectarse a bases de datos y generar HTML que luego se envía al navegador.</li>
+                            <li><strong>Gratuito y de Código Abierto:</strong> Cualquiera puede usarlo, modificarlo y distribuirlo sin costo.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es un Lenguaje de Scripting?</h3>
+                        <p>Un lenguaje de scripting, o de guion, es un tipo de lenguaje de programación que permite escribir secuencias de instrucciones (un script) que son leídas, interpretadas y ejecutadas una por una por un intérprete, en lugar de ser compiladas a código máquina antes de ejecutarse.</p>
+                        <p class="mt-2">Piensa en ello como seguir una receta de cocina paso a paso (interpretado) en lugar de construir una máquina que haga el plato automáticamente (compilado).</p>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Cómo ejecutar PHP? (Ejemplo con XAMPP)</h3>
+                        <p class="mb-3">Para ejecutar PHP, necesitas un servidor web. Paquetes como XAMPP (para Windows, Mac, Linux) o MAMP (para Mac) instalan todo lo necesario (Apache, PHP, MySQL) fácilmente.</p>
+                        <ol class="list-decimal list-inside ml-4 space-y-2">
+                            <li><strong>Instala XAMPP:</strong> Descárgalo e instálalo.</li>
+                            <li><strong>Inicia Apache:</strong> Abre el panel de control de XAMPP e inicia el módulo "Apache".</li>
+                            <li><strong>Crea tu archivo:</strong> Escribe tu código HTML y PHP. Guarda el archivo con extensión <span class="font-semibold">.php</span> (por ejemplo, `hola.php`).</li>
+                            <li><strong>Guarda en `htdocs`:</strong> Debes guardar tu archivo dentro de la carpeta `htdocs`, que se encuentra dentro de la carpeta de instalación de XAMPP (ej: `C:\xampp\htdocs\`). Puedes crear subcarpetas (ej: `htdocs\mi_proyecto\hola.php`).</li>
+                            <li><strong>Abre tu navegador:</strong> Escribe en la barra de direcciones `localhost/` seguido de la ruta a tu archivo.
+                                <ul class="list-disc list-inside ml-6 mt-1">
+                                    <li>Si lo guardaste en `htdocs\hola.php`, visita `http://localhost/hola.php`</li>
+                                    <li>Si lo guardaste en `htdocs\mi_proyecto\hola.php`, visita `http://localhost/mi_proyecto/hola.php`</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <p class="mt-4">El servidor Apache procesará el código PHP y tu navegador solo recibirá el resultado en HTML.</p>
+                    </div>
+                </div>
+
+                
+                <div id="sintaxis" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Sintaxis Básica de PHP</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Etiquetas PHP</h3>
+                        <p class="mb-3">Para que el servidor sepa qué parte de tu archivo es código PHP, debes encerrarlo en etiquetas especiales. El código PHP puede mezclarse con HTML.</p>
+                        
+                        <dl>
+                            <dt>Etiqueta Estándar (Recomendada):</dt>
+                            <dd>Es la forma más universal y recomendada.</dd>
+                            <dd><pre><code>&lt;?php
+    // Tu código PHP va aquí
+?&gt;</code></pre></dd>
+
+                            <dt>Etiqueta Corta (Short Tag):</dt>
+                            <dd>Requiere que la opción `short_open_tag` esté habilitada en la configuración de PHP. A veces no es portable.</dd>
+                            <dd><pre><code>&lt;?
+    // Código PHP
+?&gt;</code></pre></dd>
+
+                            <dt>Etiqueta de Script:</dt>
+                            <dd>Similar a HTML, menos común hoy en día.</dd>
+                            <dd><pre><code>&lt;script language="php"&gt;
+    // Código PHP
+&lt;/script&gt;</code></pre></dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Comentarios</h3>
+                        <p class="mb-3">Los comentarios son líneas que el intérprete de PHP ignora. Sirven para dejar notas y explicar el código.</p>
+                        <pre><code>&lt;?php
+    // Este es un comentario de una sola línea
+
+    # Este también es un comentario de una sola línea
+
+    /*
+      Este es un comentario
+      de múltiples líneas.
+      Sirve para explicaciones más largas.
+    */
+?&gt;</code></pre>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Imprimir en Pantalla: `echo` vs `print`</h3>
+                        <p class="mb-3">Ambas se usan para enviar datos (texto, variables) al navegador. Son casi idénticas.</p>
+                        <dl>
+                            <dt><code>echo</code></dt>
+                            <dd>Es ligeramente más rápido. No devuelve ningún valor. Puede tomar múltiples argumentos (separados por coma).</dd>
+                            <dd><pre><code>echo "Hola", " ", "Mundo"; // Imprime "Hola Mundo"</code></pre></dd>
+
+                            <dt><code>print</code></dt>
+                            <dd>Devuelve un valor de `1`, por lo que puede usarse en expresiones (aunque es raro). Solo acepta un argumento.</dd>
+                            <dd><pre><code>print "Hola Mundo"; // Imprime "Hola Mundo"</code></pre></dd>
+                        </dl>
+                        <p class="mt-3 font-semibold">¿Cuándo usar? En el 99% de los casos, usa `echo`. Es el estándar de facto y marginalmente más rápido.</p>
+                    </div>
+                </div>
+
+                
+                <div id="variables" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Variables y Tipos de Datos</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Variables</h3>
+                        <dl>
+                            <dt>¿Qué es una variable?</dt>
+                            <dd>Una variable es un contenedor para almacenar información (un número, un texto, etc.). Se identifica por un nombre único.</dd>
+
+                            <dt>Estructura (Reglas):</dt>
+                            <dd>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>En PHP, todas las variables comienzan con el símbolo de dólar (`$`).</li>
+                                    <li>El nombre debe empezar con una letra o un guion bajo (`_`).</li>
+                                    <li>No puede empezar con un número.</li>
+                                    <li>Solo puede contener caracteres alfanuméricos y guiones bajos (A-z, 0-9, y _).</li>
+                                    <li>Son <span class="font-semibold">sensibles a mayúsculas</span> (`$nombre` es diferente de `$Nombre`).</li>
+                                </ul>
+                            </dd>
+                            <dt>Ejemplo:</dt>
+                            <dd><pre><code>&lt;?php
+    $mi_variable = "Hola"; // Válido
+    $Variable2 = 100;      // Válido
+    $_usuario = "Juan";    // Válido
+    
+    // $2variable = 5;     // Inválido (empieza con número)
+?&gt;</code></pre></dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Tipos de Datos</h3>
+                        <p>PHP es un lenguaje de "tipado débil" o "dinámico", lo que significa que no necesitas declarar el tipo de dato de una variable. PHP lo infiere automáticamente.</p>
+                        <dl>
+                            <dt>String (Cadena)</dt>
+                            <dd>¿Qué es? Una secuencia de caracteres (texto). Se define con comillas simples (`'`) o dobles (`"`).</dd>
+                            <dd>Ejemplo: `$saludo = "Hola Mundo";`</dd>
+                            
+                            <dt>Integer (Entero)</dt>
+                            <dd>¿Qué es? Un número no decimal (positivo o negativo).</dd>
+                            <dd>Ejemplo: `$edad = 30;`</dd>
+
+                            <dt>Float (o Double)</dt>
+                            <dd>¿Qué es? Un número con decimales.</dd>
+                            <dd>Ejemplo: `$precio = 19.99;`</dd>
+
+                            <dt>Boolean (Booleano)</dt>
+                            <dd>¿Qué es? Representa un valor de verdad: verdadero (`true`) o falso (`false`).</dd>
+                            <dd>Ejemplo: `$es_valido = true;`</dd>
+
+                            <dt>Array (Arreglo)</dt>
+                            <dd>¿Qué es? Una variable especial que puede almacenar múltiples valores en un solo lugar.</dd>
+                            <dd>Ejemplo: `$colores = array("Rojo", "Verde", "Azul");`</dd>
+
+                            <dt>Object (Objeto)</dt>
+                            <dd>¿Qué es? Una instancia de una clase (Programación Orientada a Objetos). Almacena datos y métodos.</dd>
+
+                            <dt>NULL</dt>
+                            <dd>¿Qué es? Un tipo especial que representa "sin valor". Una variable es `NULL` si se le asigna `null` o si aún no se le ha asignado valor.</dd>
+                            <dd>Ejemplo: `$dato = null;`</dd>
+                        </dl>
+                        
+                        <h4 class="font-semibold mt-4 mb-2">Funciones Útiles:</h4>
+                        <ul class="list-disc list-inside ml-4">
+                            <li><code>gettype($variable)</code>: Devuelve el tipo de la variable como un string.</li>
+                            <li><code>var_dump($variable)</code>: Muestra información detallada sobre la variable (tipo y valor). Muy útil para depurar.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                
+                <div id="constantes" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Constantes</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es una Constante?</h3>
+                        <p>Una constante es un identificador (un nombre) para un valor simple. Como su nombre indica, su valor <span class="font-semibold">no puede cambiarse</span> durante la ejecución del script.</p>
+                        
+                        <h4 class="font-semibold mt-4 mb-2">Estructura (Cómo definirlas):</h4>
+                        <dl>
+                            <dt>Usando <code>define()</code>:</dt>
+                            <dd>Es la forma tradicional. Funciona en cualquier parte del código.</dd>
+                            <dd>
+                                <pre><code>define("NOMBRE_CONSTANTE", "Valor de la constante");
+echo NOMBRE_CONSTANTE; // Imprime "Valor de la constante"</code></pre>
+                                <ul class="list-disc list-inside ml-6 mt-2">
+                                    <li>Por convención, los nombres de las constantes se escriben en MAYÚSCULAS.</li>
+                                    <li>No usan el símbolo `$` como las variables.</li>
+                                </ul>
+                            </dd>
+
+                            <dt>Usando <code>const</code>:</dt>
+                            <dd>Es una forma más moderna, introducida en PHP 5.3. Se usa a nivel de clase o global, pero no dentro de funciones o bucles.</dd>
+                            <dd><pre><code>const MI_CONSTANTE = "Otro valor";
+echo MI_CONSTANTE;</code></pre></dd>
+                        </dl>
+                        
+                        <h4 class="font-semibold mt-4 mb-2">¿Cuándo usar Constantes?</h4>
+                        <p>Úsalas para valores que sabes que nunca deben cambiar, como:</p>
+                        <ul class="list-disc list-inside ml-4">
+                            <li>Datos de conexión a la base de datos (usuario, contraseña).</li>
+                            <li>Valores fijos de configuración (ej: `define("TASA_IVA", 0.21);`).</li>
+                            <li>Nombres de directorios o rutas importantes.</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                
+                <div id="operadores" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Operadores</h2>
+                    <p class="mb-4">Un operador es un símbolo que le dice a PHP que realice una operación (matemática, de comparación, lógica, etc.) entre variables y/o valores.</p>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Operadores Aritméticos</h3>
+                        <p>Realizan operaciones matemáticas.</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Operador</th>
+                                        <th class="border px-4 py-2">Nombre</th>
+                                        <th class="border px-4 py-2">Ejemplo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border px-4 py-2">+</td><td class="border px-4 py-2">Suma</td><td class="border px-4 py-2"><code>$a + $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">-</td><td class="border px-4 py-2">Resta</td><td class="border px-4 py-2"><code>$a - $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">*</td><td class="border px-4 py-2">Multiplicación</td><td class="border px-4 py-2"><code>$a * $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">/</td><td class="border px-4 py-2">División</td><td class="border px-4 py-2"><code>$a / $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">%</td><td class="border px-4 py-2">Módulo (Resto)</td><td class="border px-4 py-2"><code>$a % $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">**</td><td class="border px-4 py-2">Exponenciación</td><td class="border px-4 py-2"><code>$a ** $b</code> (a elevado a b)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Operadores de Asignación</h3>
+                        <p>Asignan un valor a una variable. El básico es <code>=</code>.</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Operador</th>
+                                        <th class="border px-4 py-2">Equivalente a</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border px-4 py-2"><code>$a = $b</code></td><td class="border px-4 py-2">Asigna el valor de $b a $a</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>$a += $b</code></td><td class="border px-4 py-2"><code>$a = $a + $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2"><code>$a -= $b</code></td><td class="border px-4 py-2"><code>$a = $a - $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2"><code>$a *= $b</code></td><td class="border px-4 py-2"><code>$a = $a * $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2"><code>$a .= $b</code></td><td class="border px-4 py-2"><code>$a = $a . $b</code> (Concatenación)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Operadores de Comparación</h3>
+                        <p>Comparan dos valores y devuelven un booleano (<code>true</code> o <code>false</code>).</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Operador</th>
+                                        <th class="border px-4 py-2">Nombre</th>
+                                        <th class="border px-4 py-2">Ejemplo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border px-4 py-2">==</td><td class="border px-4 py-2">Igual</td><td class="border px-4 py-2"><code>$a == $b</code> (true si son iguales tras convertir tipos)</td></tr>
+                                    <tr><td class="border px-4 py-2">===</td><td class="border px-4 py-2">Idéntico</td><td class="border px-4 py-2"><code>$a === $b</code> (true si son iguales Y del mismo tipo)</td></tr>
+                                    <tr><td class="border px-4 py-2">!=</td><td class="border px-4 py-2">Diferente</td><td class="border px-4 py-2"><code>$a != $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">!==</td><td class="border px-4 py-2">No Idéntico</td><td class="border px-4 py-2"><code>$a !== $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">&lt;</td><td class="border px-4 py-2">Menor que</td><td class="border px-4 py-2"><code>$a &lt; $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">&gt;</td><td class="border px-4 py-2">Mayor que</td><td class="border px-4 py-2"><code>$a &gt; $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">&lt;=</td><td class="border px-4 py-2">Menor o igual que</td><td class="border px-4 py-2"><code>$a &lt;= $b</code></td></tr>
+                                    <tr><td class="border px-4 py-2">&gt;=</td><td class="border px-4 py-2">Mayor o igual que</td><td class="border px-4 py-2"><code>$a &gt;= $b</code></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-3 font-semibold">¿Cuándo usar? Siempre que puedas, usa la comparación estricta (<code>===</code> y <code>!==</code>) para evitar errores sutiles de conversión de tipos. Usa <code>==</code> solo si necesitas comparar valores sin importar el tipo (ej: `5 == "5"` es `true`).</p>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Operadores Lógicos</h3>
+                        <p>Permiten combinar múltiples condiciones.</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Operador</th>
+                                        <th class="border px-4 py-2">Nombre</th>
+                                        <th class="border px-4 py-2">Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border px-4 py-2"><code>and</code> o <code>&&</code></td><td class="border px-4 py-2">Y (And)</td><td class="border px-4 py-2"><code>true</code> si ambas condiciones son verdaderas.</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>or</code> o <code>||</code></td><td class="border px-4 py-2">O (Or)</td><td class="border px-4 py-2"><code>true</code> si al menos una condición es verdadera.</td></tr>
+                                    <tr><td class="border px-4 py-2">!</td><td class="border px-4 py-2">No (Not)</td><td class="border px-4 py-2">Invierte el valor de verdad (<code>!true</code> es <code>false</code>).</td></tr>
+                                    <tr><td class="border px-4 py-2">xor</td><td class="border px-4 py-2">O Exclusivo</td><td class="border px-4 py-2"><code>true</code> si solo una de las condiciones es verdadera, pero no ambas.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-3 font-semibold">¿Cuándo usar? Usa <code>&&</code> y <code>||</code>. Tienen mayor precedencia (se ejecutan antes) que <code>and</code> y <code>or</code>, lo cual es el comportamiento esperado en la mayoría de lenguajes y evita errores.</p>
+                    </div>
+                </div>
+
+                
+                <div id="condicionales" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Estructuras de Control: Condicionales</h2>
+                    <p class="mb-4">Los condicionales permiten que tu script tome decisiones y ejecute diferentes bloques de código según si se cumple o no una condición.</p>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>if</code>, <code>elseif</code>, <code>else</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Es la estructura condicional más básica. Evalúa una condición y ejecuta un bloque de código si es verdadera.</dd>
+                            
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>&lt;?php
+    $edad = 20;
+    
+    if ($edad >= 18) {
+        // Bloque 1: Se ejecuta si $edad es 18 o más
+        echo "Eres mayor de edad.";
+    } elseif ($edad >= 13) {
+        // Bloque 2: Se ejecuta si la 1ª es falsa Y $edad es 13 o más
+        echo "Eres un adolescente.";
+    } else {
+        // Bloque 3: Se ejecuta si ninguna de las anteriores es verdadera
+        echo "Eres un niño.";
+    }
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Úsalo para la mayoría de toma de decisiones.
+                                <ul class="list-disc list-inside ml-4 mt-1">
+                                    <li>Usa <code>if</code> solo si solo te importa el caso verdadero.</li>
+                                    <li>Usa <code>if...else</code> para una decisión simple de dos caminos (A o B).</li>
+                                    <li>Usa <code>if...elseif...else</code> para múltiples condiciones excluyentes.</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Operador Ternario</h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Es una forma corta de escribir un <code>if...else</code> simple. Es un operador, no una estructura.</dd>
+                            
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>(condición) ? (valor_si_true) : (valor_si_false);</code></pre></dd>
+                            <dd><strong>Ejemplo:</strong></dd>
+                            <dd><pre><code>$edad = 20;
+$mensaje = ($edad >= 18) ? "Mayor de edad" : "Menor de edad";
+echo $mensaje; // Imprime "Mayor de edad"</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Úsalo solo para asignaciones condicionales simples, donde quieres asignar un valor u otro a una variable. No lo uses para ejecutar bloques de código complejos, ya que se vuelve ilegible.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>switch</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Permite comparar una variable contra múltiples valores posibles.</dd>
+                            
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>&lt;?php
+    $dia = "Lunes";
+    
+    switch ($dia) {
+        case "Lunes":
+            echo "Hoy es Lunes.";
+            break; // Importante: 'break' detiene la ejecución
+            
+        case "Martes":
+            echo "Hoy es Martes.";
+            break;
+            
+        case "Sábado":
+        case "Domingo":
+            echo "Es fin de semana.";
+            break;
+            
+        default:
+            // Se ejecuta si no coincide ningún 'case'
+            echo "Es otro día de la semana.";
+            break;
+    }
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Úsalo cuando tengas un <code>if...elseif</code> largo que solo compara la <span class="font-semibold">misma variable</span> contra diferentes valores exactos. Es más limpio y legible que muchos <code>elseif</code>.</dd>
+                        </dl>
+                    </div>
+                </div>
+                
+                
+                <div id="bucles" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Estructuras de Control: Bucles</h2>
+                    <p class="mb-4">Los bucles, o ciclos, permiten ejecutar un mismo bloque de código múltiples veces, hasta que una condición deje de cumplirse.</p>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>while</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Ejecuta un bloque de código mientras la condición sea verdadera. La condición se comprueba <span class="font-semibold">antes</span> de cada ejecución.</dd>
+                            
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>&lt;?php
+    $contador = 0;
+    
+    while ($contador < 5) {
+        echo $contador; // 01234
+        $contador++; // ¡Crítico! Incrementar para no crear un bucle infinito
+    }
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Úsalo cuando no sabes exactamente cuántas veces se ejecutará el bucle, pero sabes la condición de parada. (Ej: "mientras haya filas en la base de datos...").</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>do...while</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Similar a <code>while</code>, pero la condición se comprueba <span class="font-semibold">después</span> de cada ejecución. Esto garantiza que el bloque de código se ejecute <span class="font-semibold">al menos una vez</span>.</dd>
+                            
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>&lt;?php
+    $contador = 10;
+    
+    do {
+        echo "Este código se ejecuta una vez.";
+        $contador++;
+    } while ($contador < 5); // La condición (11 < 5) es falsa, pero ya se ejecutó
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Es poco común. Úsalo solo cuando necesitas que el código se ejecute sí o sí una vez, y luego comprobar si debe repetirse.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>for</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Es el bucle más estructurado, ideal para repetir un bloque un número conocido de veces.</dd>
+                            
+                            <dt>Estructura Detallada:</dt>
+                            <dd><pre><code>for (inicialización; condición; incremento) {
+    // código a ejecutar
+}</code></pre></dd>
+                            <dd>
+                                <ul class="list-none space-y-2 mt-2">
+                                    <li><strong>1. <code>inicialización</code>:</strong> Se ejecuta <span class="font-semibold">una sola vez</span> al principio del bucle. (Ej: <code>$i = 0</code>).</li>
+                                    <li><strong>2. <code>condición</code>:</strong> Se comprueba <span class="font-semibold">antes</span> de cada iteración. Si es `true`, el bucle sigue. Si es `false`, el bucle termina. (Ej: <code>$i < 10</code>).</li>
+                                    <li><strong>3. <code>incremento</code>:</strong> Se ejecuta <span class="font-semibold">después</span> de cada iteración. (Ej: <code>$i++</code>).</li>
+                                </ul>
+                            </dd>
+                            <dd><strong>Ejemplo:</strong></dd>
+                            <dd><pre><code>&lt;?php
+    // Imprime números del 0 al 9
+    for ($i = 0; $i < 10; $i++) {
+        echo $i;
+    }
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Es la mejor opción cuando sabes de antemano cuántas veces quieres repetir el bucle (ej: "repetir 10 veces", "recorrer los 50 estados").</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>foreach</code></h3>
+                        <dl>
+                            <dt>¿Qué es?</dt>
+                            <dd>Un bucle especial diseñado para recorrer <span class="font-semibold">arrays</span> (arreglos).</dd>
+                            
+                            <dt>Estructura Detallada:</dt>
+                            <dd><strong>Opción 1: Solo valores</strong></dd>
+                            <dd><pre><code>foreach ($array as $valor) {
+    // código a ejecutar con $valor
+}</code></pre></dd>
+                            <dd><strong>Opción 2: Claves y valores</strong> (para arrays asociativos)</dd>
+                            <dd><pre><code>foreach ($array as $clave => $valor) {
+    // código a ejecutar con $clave y $valor
+}</code></pre></dd>
+
+                            <dd><strong>Ejemplo:</strong></dd>
+                            <dd><pre><code>&lt;?php
+    $colores = array("Rojo", "Verde", "Azul");
+    
+    foreach ($colores as $color) {
+        echo $color . " "; // Imprime "Rojo Verde Azul "
+    }
+    
+    $capitales = array("España" => "Madrid", "Francia" => "París");
+    
+    foreach ($capitales as $pais => $capital) {
+        echo "La capital de $pais es $capital. ";
+    }
+?&gt;</code></pre></dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Úsalo <span class="font-semibold">siempre</span> que necesites iterar sobre todos los elementos de un array. Es más fácil y seguro que usar un bucle `for` para arrays.</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3"><code>break</code> y <code>continue</code></h3>
+                        <dl>
+                            <dt><code>break</code></dt>
+                            <dd>¿Qué es? Termina la ejecución del bucle (<code>for</code>, <code>while</code>, <code>switch</code>) actual.</dd>
+                            <dd>¿Cuándo usarlo? Cuando encuentras lo que buscabas y no necesitas seguir iterando. (Ej: "buscar un usuario en un array; si lo encuentras, hacer <code>break</code>").</dd>
+                            
+                            <dt><code>continue</code></dt>
+                            <dd>¿Qué es? Salta el resto de la iteración actual y pasa a la <span class="font-semibold">siguiente</span> iteración del bucle.</dd>
+                            <dd>¿Cuándo usarlo? Cuando quieres ignorar un elemento específico del bucle pero continuar con los demás. (Ej: "en un bucle de números, si el número es impar, hacer <code>continue</code> para procesar solo los pares").</dd>
+                        </dl>
+                    </div>
+
+                </div>
+
+                
+                <div id="arrays" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Arrays (Arreglos)</h2>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es un Array?</h3>
+                        <p>Un array es una variable especial que puede almacenar múltiples valores bajo un solo nombre. Es una colección ordenada de elementos. Cada elemento tiene una "clave" (o índice) y un "valor".</p>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Tipos de Arrays</h3>
+                        <dl>
+                            <dt>1. Arrays Indexados</dt>
+                            <dd>¿Qué es? Un array donde las claves son números enteros (índices), que empiezan automáticamente en 0.</dd>
+                            <dd>Estructura:</dd>
+                            <dd><pre><code>&lt;?php
+    // Sintaxis moderna (recomendada)
+    $frutas = ["Manzana", "Pera", "Naranja"];
+    
+    // Sintaxis clásica
+    // $frutas = array("Manzana", "Pera", "Naranja");
+    
+    echo $frutas[0]; // Imprime "Manzana"
+    echo $frutas[2]; // Imprime "Naranja"
+?&gt;</code></pre></dd>
+                            <dd>¿Cuándo usarlo? Para listas simples donde el orden importa pero no necesitas nombres personalizados para cada elemento (una lista de usuarios, una lista de tareas, etc.).</dd>
+                            
+                            <dt>2. Arrays Asociativos</dt>
+                            <dd>¿Qué es? Un array donde las claves son strings (cadenas de texto) que tú defines. Se usa para almacenar pares clave-valor.</dd>
+                            <dd>Estructura:</dd>
+                            <dd><pre><code>&lt;?php
+    $usuario = [
+        "nombre" => "Juan",
+        "edad" => 30,
+        "ciudad" => "Madrid"
+    ];
+    
+    echo $usuario["nombre"]; // Imprime "Juan"
+    echo $usuario["edad"];   // Imprime 30
+?&gt;</code></pre></dd>
+                            <dd>¿Cuándo usarlo? Para almacenar datos estructurados, como las propiedades de un objeto (un usuario, un producto, una configuración).</dd>
+                            
+                            <dt>3. Arrays Multidimensionales</dt>
+                            <dd>¿Qué es? Un array que contiene otros arrays. Permite crear estructuras complejas como tablas o matrices.</dd>
+                            <dd>Estructura:</dd>
+                            <dd><pre><code>&lt;?php
+    $alumnos = [
+        [ "nombre" => "Ana", "nota" => 9 ],
+        [ "nombre" => "Luis", "nota" => 7 ],
+        [ "nombre" => "Sara", "nota" => 10 ]
+    ];
+    
+    // Acceder al nombre del primer alumno
+    echo $alumnos[0]["nombre"]; // Imprime "Ana"
+    
+    // Acceder a la nota del segundo alumno
+    echo $alumnos[1]["nota"];   // Imprime 7
+?&gt;</code></pre></dd>
+                            <dd>¿Cuándo usarlo? Para almacenar colecciones de datos estructurados (ej: una lista de usuarios, donde cada usuario es un array asociativo).</dd>
+                        </dl>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Funciones de Arrays Comunes</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Función</th>
+                                        <th class="border px-4 py-2">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border px-4 py-2"><code>count($array)</code></td><td class="border px-4 py-2">Devuelve el número de elementos en el array.</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>sort($array)</code></td><td class="border px-4 py-2">Ordena un array indexado por valor (A-Z, 0-9).</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>rsort($array)</code></td><td class="border px-4 py-2">Ordena un array indexado por valor en orden reverso (Z-A, 9-0).</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>asort($array)</code></td><td class="border px-4 py-2">Ordena un array asociativo por valor, manteniendo la relación clave-valor.</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>ksort($array)</code></td><td class="border px-4 py-2">Ordena un array asociativo por clave.</td></tr>
+                                    <tr><td class="border px-4 py-2"><code>arsort()</code> / <code>krsort()</code></td><td class="border px-4 py-2">Versiones inversas de <code>asort</code> y <code>ksort</code>.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div id="funciones" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Funciones</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es una Función?</h3>
+                        <p>Una función es un bloque de código reutilizable que realiza una tarea específica. Se le da un nombre y se puede "llamar" (ejecutar) en cualquier parte del script.</p>
+                        <p class="mt-2">Ayudan a organizar el código, evitar la repetición y hacerlo más legible (principio DRY: "Don't Repeat Yourself").</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Funciones Definidas por el Usuario</h3>
+                        <dl>
+                            <dt>Estructura:</dt>
+                            <dd><pre><code>&lt;?php
+    // 1. Definición de la función
+    // 'string' y 'int' son "type hints" (opcionales pero recomendadas)
+    // que indican el tipo de dato esperado y devuelto.
+    function saludar(string $nombre, int $edad): string {
+        // Código de la función
+        $mensaje = "Hola, $nombre. Tienes $edad años.";
+        
+        // 'return' devuelve un valor
+        return $mensaje;
+    }
+    
+    // 2. Llamada a la función
+    $saludo_juan = saludar("Juan", 30);
+    echo $saludo_juan; // Imprime "Hola, Juan. Tienes 30 años."
+?&gt;</code></pre></dd>
+                            <dd>
+                                <ul class="list-disc list-inside ml-4 mt-2">
+                                    <li><strong>Argumentos (o Parámetros):</strong> Son las variables que la función recibe (ej: <code>$nombre</code>, <code>$edad</code>).</li>
+                                    <li><strong>Valor de Retorno:</strong> Es el valor que la función "devuelve" usando la palabra clave <code>return</code>. Si una función no tiene <code>return</code>, devuelve <code>NULL</code>.</li>
+                                </ul>
+                            </dd>
+                            
+                            <dt>¿Cuándo usarlo?</dt>
+                            <dd>Siempre que tengas una tarea que vayas a realizar más de una vez (ej: validar un email, conectar a la BD, calcular un impuesto).</dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Ámbito de Variables (Scope)</h3>
+                        <dl>
+                            <dt>Local</dt>
+                            <dd>Las variables definidas <span class="font-semibold">dentro</span> de una función solo existen dentro de esa función. No se puede acceder a ellas desde fuera.</dd>
+                            <dt>Global</dt>
+                            <dd>Las variables definidas <span class="font-semibold">fuera</span> de una función no son accesibles directamente desde dentro. Para usarlas, debes usar la palabra clave <code>global</code> (no recomendado) o pasarlas como argumento (recomendado).</dd>
+                            <dd><pre><code>&lt;?php
+    $variable_global = "Soy global";
+    
+    function miFuncion() {
+        // echo $variable_global; // Esto da error
+        
+        global $variable_global; // Forma 1 (no recomendada)
+        echo $variable_global; 
+        
+        $variable_local = "Soy local";
+    }
+    
+    miFuncion();
+    // echo $variable_local; // Esto da error
+?&gt;</code></pre></dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Inclusión de Ficheros</h3>
+                        <p>Permiten dividir tu código en múltiples archivos para organizarlo mejor (ej: un archivo para la cabecera, otro para el pie de página, otro para las funciones).</p>
+                        <dl>
+                            <dt><code>include 'archivo.php';</code></dt>
+                            <dd>¿Qué es? Inserta el código del archivo. Si el archivo no se encuentra, PHP mostrará una <span class="font-semibold">advertencia (Warning)</span> y el script continuará ejecutándose.</dd>
+                            <dd>¿Cuándo usarlo? Para contenido no esencial (ej: un pie de página, un widget). Si falla, la página principal aún puede mostrarse parcialmente.</dd>
+
+                            <dt><code>require 'archivo.php';</code></dt>
+                            <dd>¿Qué es? Inserta el código del archivo. Si el archivo no se encuentra, PHP mostrará un <span class="font-semibold">error fatal (Fatal Error)</span> y el script se detendrá.</dd>
+                            <dd>¿Cuándo usarlo? Para contenido esencial sin el cual la página no puede funcionar (ej: conexión a la base de datos, un archivo de funciones críticas).</dd>
+                            
+                            <dt><code>include_once</code> y <code>require_once</code></dt>
+                            <dd>¿Qué es? Hacen lo mismo que sus contrapartes, pero se aseguran de que el archivo se incluya <span class="font-semibold">solo una vez</span>. Si intentas incluirlo de nuevo, PHP lo ignorará.</dd>
+                            <dd>¿Cuándo usarlo? Es la opción más segura y recomendada, especialmente para archivos de funciones o clases, para evitar re-definiciones y errores.</dd>
+                        </dl>
+                    </div>
+                </div>
+
+
+                
+                <div id="strings" class="content-panel hidden">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Cadenas (Strings)</h2>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">¿Qué es un String?</h3>
+                        <p>Un string, o cadena, es una secuencia de caracteres (letras, números, símbolos) usada para representar texto. En PHP, se definen con comillas simples (<code>'</code>) o dobles (<code>"</code>).</p>
+                        <ul class="list-disc list-inside ml-4 mt-2">
+                            <li><strong>Comillas Simples (<code>'</code>):</strong> Tratan el texto de forma literal. No interpretan variables. (<code>'$nombre'</code> imprime literalmente `$nombre`).</li>
+                            <li><strong>Comillas Dobles (<code>"</code>):</strong> Interpretan (expanden) las variables que hay dentro. (<code>"$nombre"</code> imprime el valor de la variable `$nombre`).</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Funciones de Strings Comunes</h3>
+                        <p>PHP tiene cientos de funciones para manipular strings. Aquí están las más usadas:</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-300">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="border px-4 py-2">Función</th>
+                                        <th class="border px-4 py-2">Descripción (¿Qué es?)</th>
+                                        <th class="border px-4 py-2">Ejemplo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>strlen($str)</code></td>
+                                        <td class="border px-4 py-2">Devuelve la longitud (número de caracteres) de la cadena.</td>
+                                        <td class="border px-4 py-2"><pre><code>strlen("Hola") // 4</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>str_word_count($str)</code></td>
+                                        <td class="border px-4 py-2">Cuenta el número de palabras en la cadena.</td>
+                                        <td class="border px-4 py-2"><pre><code>str_word_count("Hola Mundo") // 2</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>strrev($str)</code></td>
+                                        <td class="border px-4 py-2">Invierte la cadena.</td>
+                                        <td class="border px-4 py-2"><pre><code>strrev("Hola") // "aloH"</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>strpos($str, $sub)</code></td>
+                                        <td class="border px-4 py-2">Busca la posición de la primera aparición de una subcadena (<code>$sub</code>) dentro de <code>$str</code>. (Devuelve <code>false</code> si no la encuentra).</td>
+                                        <td class="border px-4 py-2"><pre><code>strpos("Hola Mundo", "Mun") // 5</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>str_replace($b, $r, $str)</code></td>
+                                        <td class="border px-4 py-2">Reemplaza todas las apariciones de <code>$b</code> (buscar) por <code>$r</code> (reemplazar) en <code>$str</code>.</td>
+                                        <td class="border px-4 py-2"><pre><code>str_replace("Mundo", "PHP", "Hola Mundo") // "Hola PHP"</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>explode($del, $str)</code></td>
+                                        <td class="border px-4 py-2">Divide un string en un array usando un delimitador (<code>$del</code>).</td>
+                                        <td class="border px-4 py-2"><pre><code>explode(" ", "Hola Mundo") // ["Hola", "Mundo"]</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2"><code>implode($glue, $arr)</code></td>
+                                        <td class="border px-4 py-2">Une los elementos de un array (<code>$arr</code>) en un string, usando un "pegamento" (<code>$glue</code>). (También <code>join()</code>).</td>
+                                        <td class="border px-4 py-2"><pre><code>implode(" ", ["Hola", "Mundo"]) // "Hola Mundo"</code></pre></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+
+            function showPanel(targetId) {
+                contentPanels.forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+                
+                const targetPanel = document.getElementById(targetId);
+                if (targetPanel) {
+                    targetPanel.classList.remove('hidden');
+                }
+            }
+
+            function setActiveLink(clickedLink) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active-link');
+                    link.classList.remove('bg-blue-600', 'text-white'); 
+                    link.classList.add('text-gray-700', 'hover:bg-blue-50'); 
+                });
+                
+                clickedLink.classList.add('active-link');
+                clickedLink.classList.add('bg-blue-600', 'text-white'); 
+                clickedLink.classList.remove('text-gray-700', 'hover:bg-blue-50'); 
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    
+                    showPanel(targetId);
+                    setActiveLink(this);
+
+                    if (!sidebar.classList.contains('hidden')) {
+                        if (window.innerWidth < 768) {
+                            sidebar.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('hidden');
+            });
+
+            const initialActiveLink = document.querySelector('.nav-link[data-target="inicio"]');
+            if (initialActiveLink) {
+                setActiveLink(initialActiveLink);
+            }
+        });
+    </script>
+
+</body>
+</html>
