@@ -9,19 +9,18 @@ $audiencia = [
     [20, 58, 60]
 ];
 
-echo "<table>";
-echo "<tr><th>Película</th><th>Sesión 1</th><th>Sesión 2</th><th>Sesión 3</th></tr>";
+/*Me he liado haciendolo con una tabla y lo he vuelto a hacer entero*/
+for ($fila=0; $fila<=3; $fila++){
+    $totalPelicula = $audiencia[$fila][0] + $audiencia[$fila][1] + $audiencia[$fila][2];
+    echo "<br>"."En la pelicula ". ($fila + 1). " Han habido ". $totalPelicula. " Espectadores"."</br>" ;
+};
+for ($columna=0; $columna<=2; $columna++){
+    $totalSesion=0;
 
-for ($fila = 0; $fila < 4; $fila++) {
-    echo "<tr>";
-    echo "<td>" . "Película " . ($fila + 1) . "</td>";
-
-    for ($col = 0; $col < 3; $col++) {
-        echo "<td>" . $audiencia[$fila][$col] . "</td>";
+    for ($fila = 0; $fila <= 3; $fila++){
+        $totalSesion = $audiencia[0][$columna] + $audiencia[1][$columna] + $audiencia[2][$columna] + $audiencia[3][$columna];
     }
+    echo "<br>"."En la sesion ". ($columna + 1). " Han habido ". $totalSesion. " Espectadores"."</br>" ;
+};
 
-    echo "</tr>";
-}
-
-echo "</table>";
 ?>

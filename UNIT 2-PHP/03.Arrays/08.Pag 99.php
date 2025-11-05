@@ -21,14 +21,16 @@ echo "</table>";
 /*El ejercicio empieza aqui*/
 
 $TempMax = 0; 
+$DiaMax = 0;
 
 for ($a = 0; $a < 3; $a++){
     if ($temperatures[$a][2] >= $TempMax){
         $TempMax = $temperatures[$a][2];
+        $DiaMax = $temperatures[$a][0];
     }
 }
 
-echo "La Temperatura Maxima del mes es: ", $TempMax, "ºC";
+echo "La Temperatura Maxima del mes es: ", $TempMax, "ºC", " alcanzada el dia ", $DiaMax ;
 
 
 ?>
