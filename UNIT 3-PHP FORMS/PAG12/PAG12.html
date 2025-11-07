@@ -6,9 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-        <form method="post" action="PAG6.php">
+        <form method="post" action="PAG12.php">
             <label>Name: <input type="text" name="name"></label><br>
             <label>E-mail: <input type="email" name="mail"></label><br>
+            <label>Role: </label>
+                <select multiple="multiple" name = "roles[]">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="staff">Service Staff</option>
+                </select>
             <input type="submit">Send</input>
         </form>
 </body>
