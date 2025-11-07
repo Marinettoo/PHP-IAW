@@ -11,10 +11,10 @@
     $roles = $_POST["roles"];
 
     if (empty($_POST["name"])){
-      echo "NO HAS PUESTO NADA EN NAME";
+      echo "Write your name";
     }
     elseif (empty($_POST["mail"])){
-      echo "NO HAS PUESTO NADA EN EMAIL";
+      echo "Write you email";
     }
     else{
     echo "<p>Welcome, $name ($mail). Your Role(s) are:</p>";
