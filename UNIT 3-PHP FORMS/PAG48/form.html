@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Telebirria</title>
+</head>
+<body>
+    <h1>TELEBIRRIA</h1>
+    <h2>PARA REALIZAR SU PEDIDO, RELLENE EL FORMULARIO</h2>
+
+    <form action="resumen.php" method="post">
+
+    <fieldset>
+        <legend>Datos personales y envío</legend>
+        <div><label>Nombre*: </label><input type="text" name="nombre" required></div>
+        <div><label>Apellidos*: </label><input type="text" name="apellidos" required></div>
+        <div><label>Domicilio*: </label><input type="text" name="domicilio" required></div>
+        <div><label>Localidad*: </label><input type="text" name="localidad" required></div>
+        <div><label>Código postal*: </label><input type="number" name="cp" required></div>
+        <div><label>Teléfono*: </label><input type="tel" name="telefono" required></div>
+        <div><label>E-mail: </label><input type="email" name="email"></div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Opción de entrega</legend>
+        <label><input type="radio" name="entrega" value="local" checked> Recoger en local</label><br>
+        <label><input type="radio" name="entrega" value="domicilio"> Envío a domicilio</label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Elija su menú</legend>
+
+        Tamaño del bocadillo:<br>
+        <select name="tamano">
+            <option value="pequeno - 3 ">Pequeño</option>
+            <option value="mediano - 4" selected>Mediano</option>
+            <option value="grande - 5">Grande</option>
+            <option value="enorme - 6">Enorme</option>
+        </select>
+
+        <br><br>Ingredientes:<br>
+        <select name="ingredientes[]" multiple size="4">
+            <option value="anchoas">Anchoas</option>
+            <option value="calamares">Calamares</option>
+            <option value="mejillones">Mejillones</option>
+            <option value="jamon">Jamón</option>
+            <option value="tortilla">Tortilla</option>
+            <option value="queso">Queso</option>
+            <option value="carne_salsa">Carne en salsa</option>
+            <option value="lomo">Lomo</option>
+            <option value="panceta">Panceta</option>
+        </select>
+    </fieldset>
+
+    <input type="submit" value="Enviar pedido">
+
+    </form>
+</body>
+</html>

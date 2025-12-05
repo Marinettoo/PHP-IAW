@@ -1,5 +1,5 @@
 <?php
-function triple(&$number) {
+function triple($number) {
     return $number * 3;
 }
 

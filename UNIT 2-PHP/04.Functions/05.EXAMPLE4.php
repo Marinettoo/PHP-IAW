@@ -1,10 +1,14 @@
 <?php
 function triple($number) {
-$number *= 3;
+$num = $number * 3;
+return $num;
 }
-$num = 2;
-triple($num);
-echo $num;
+$num = 8;
+echo triple($num);
 ?>
+
+
+
+
 
 

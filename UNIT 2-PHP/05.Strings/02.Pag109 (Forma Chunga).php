@@ -4,7 +4,7 @@ $palabra = "oro";
 $invertida = "";
 
 for ($i = strlen($palabra); $i >= 0; $i--){
-    $invertida .= $palabra[$i];
+    $invertida = $palabra[$i];
 }
 
 if ($palabra == $invertida){
